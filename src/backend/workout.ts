@@ -41,7 +41,7 @@ export interface UserWorkout {
 
 // --- Firestore Logic (connected to firebase.ts) ---
 
-import { db } from "./firebase";
+import { db } from "../services/firebase";
 import { collection, addDoc, doc, updateDoc, getDocs, query, where } from "firebase/firestore";
 
 /**

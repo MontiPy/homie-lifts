@@ -1,5 +1,5 @@
 // Run this file with: npx tsx WorkoutBackendTest.ts or npx ts-node WorkoutBackendTest.ts
-import { seedWorkoutTemplates } from "./workout";
+import { seedWorkoutTemplates } from "../backend/workout";
 import { db } from "./firebase";
 
 // Fire off the seeding logic
