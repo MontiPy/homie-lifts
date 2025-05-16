@@ -1,18 +1,17 @@
-// src/services/firebase.ts
-import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
 
-// TODO: replace these with your Firebase project settings
+import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
+
+// 🔐 Replace these values with your Firebase config from your Firebase Console
 const firebaseConfig = {
-  apiKey: 'YOUR_API_KEY',
-  authDomain: 'YOUR_AUTH_DOMAIN',
-  projectId: 'YOUR_PROJECT_ID',
-  storageBucket: 'YOUR_STORAGE_BUCKET',
-  messagingSenderId: 'YOUR_MSG_SENDER_ID',
-  appId: 'YOUR_APP_ID',
+    apiKey: "AIzaSyCsqJ0goAIc3BMEDLnJxcThE6CmPJAj-xQ",
+    authDomain: "homie-lifts.firebaseapp.com",
+    projectId: "homie-lifts",
+    storageBucket: "homie-lifts.firebasestorage.app",
+    messagingSenderId: "471619425579",
+    appId: "1:471619425579:web:68388d8aa8acf1cd46616e",
+    measurementId: "G-K3Y82V6ERP"
 };
 
 const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
-export const db   = getFirestore(app);
+export const db = getFirestore(app);

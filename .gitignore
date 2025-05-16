@@ -35,3 +35,9 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+# Ignore Visual Studio and system files
+.vs/
+*.user
+*.suo
+*.vscode/
