@@ -30,8 +30,15 @@ yarn-error.*
 .DS_Store
 *.pem
 
+.env
 # local env files
 .env*.local
 
 # typescript
 *.tsbuildinfo
+
+# Ignore Visual Studio and system files
+.vs/
+*.user
+*.suo
+*.vscode/
