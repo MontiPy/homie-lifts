@@ -6,9 +6,10 @@ import {
   FlatList,
   TouchableOpacity,
   ActivityIndicator,
+  CheckBox
 } from "react-native";
-import { useRoute, useNavigation } from "@react-navigation/native";
-import { doc, getDoc, collection, addDoc, Timestamp } from "firebase/firestore";
+import { useRoute } from "@react-navigation/native";
+import { doc, getDoc } from "firebase/firestore";
 import { db } from "../services/firebase";
 
 interface Exercise {
@@ -27,7 +28,6 @@ interface Workout {
 
 const WorkoutInProgressScreen = () => {
   const route = useRoute();
-  const navigation = useNavigation();
   const { workoutId } = route.params as { workoutId: string };
 
   const [workout, setWorkout] = useState<Workout | null>(null);
@@ -69,31 +69,9 @@ const WorkoutInProgressScreen = () => {
     });
   };
 
-  const handleFinishWorkout = async () => {
-    if (!workout) return;
-
-    const userId = "demoUser123"; // Replace with actual auth user ID later
-    const performance = workout.exercises.map((ex) => ({
-      exercise: ex.name,
-      setsCompleted: completedSets[ex.name] || [],
-    }));
-
-    try {
-      await addDoc(collection(db, "userWorkouts"), {
-        userId,
-        workoutId,
-        workoutName: workout.name,
-        completedAt: Timestamp.now(),
-        performance,
-      });
-      console.log("Workout saved successfully!");
-      navigation.navigate("WorkoutSummary" as never, {
-        workoutName: workout.name,
-        performance,
-      } as never);
-    } catch (error) {
-      console.error("Failed to save workout:", error);
-    }
+  const handleFinishWorkout = () => {
+    console.log("Workout complete! Tracking data coming soon.");
+    // Later: push to userWorkouts collection in Firestore
   };
 
   if (loading || !workout) {
