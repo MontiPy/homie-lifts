@@ -40,10 +40,8 @@ const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
     }
   };
 
-  // @ts-ignore
-  const backgroundImage = require("../../assets/images/homie-bg.png");
-  // @ts-ignore
-  const saiyansImage = require("../../assets/images/saiyans.png");
+  const backgroundImage = require("../../assets/images/homie-bg.png") as number;
+  const saiyansImage = require("../../assets/images/saiyans.png") as number;
 
   return (
     <ImageBackground
@@ -58,32 +56,35 @@ const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
 
         <TextInput
           style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        autoCapitalize="none"
-        keyboardType="email-address"
-      />
+          placeholder="Email"
+          value={email}
+          onChangeText={setEmail}
+          autoCapitalize="none"
+          keyboardType="email-address"
+        />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
 
-      <TouchableOpacity style={styles.button} onPress={onSubmit}>
-        <Text style={styles.buttonText}>Sign Up</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={onSubmit}>
+          <Text style={styles.buttonText}>Sign Up</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.switch}
-        onPress={() => navigation.navigate("SignIn")}
-      >
-        <Text style={styles.switchText}>Already have an account? Sign In</Text>
-      </TouchableOpacity>
-    </View>
+        <TouchableOpacity
+          style={styles.switch}
+          onPress={() => navigation.navigate("SignIn")}
+        >
+          <Text style={styles.switchText}>
+            Already have an account? Sign In
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </ImageBackground>
   );
 };
 

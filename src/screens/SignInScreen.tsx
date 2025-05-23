@@ -40,9 +40,7 @@ const SignInScreen: React.FC<SignInScreenProps> = ({ navigation }) => {
     }
   };
 
-  // @ts-ignore
   const backgroundImage = require("../../assets/images/homie-bg.png");
-  // @ts-ignore
   const saiyansImage = require("../../assets/images/saiyans.png");
 
   return (
@@ -58,32 +56,33 @@ const SignInScreen: React.FC<SignInScreenProps> = ({ navigation }) => {
 
         <TextInput
           style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        autoCapitalize="none"
-        keyboardType="email-address"
-      />
+          placeholder="Email"
+          value={email}
+          onChangeText={setEmail}
+          autoCapitalize="none"
+          keyboardType="email-address"
+        />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
 
-      <TouchableOpacity style={styles.button} onPress={onSubmit}>
-        <Text style={styles.buttonText}>Sign In</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={onSubmit}>
+          <Text style={styles.buttonText}>Sign In</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.switch}
-        onPress={() => navigation.navigate("SignUp")}
-      >
-        <Text style={styles.switchText}>Don’t have an account? Sign Up</Text>
-      </TouchableOpacity>
-    </View>
+        <TouchableOpacity
+          style={styles.switch}
+          onPress={() => navigation.navigate("SignUp")}
+        >
+          <Text style={styles.switchText}>Don't have an account? Sign Up</Text>
+        </TouchableOpacity>
+      </View>
+    </ImageBackground>
   );
 };
 
