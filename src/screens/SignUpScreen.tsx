@@ -7,9 +7,11 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  ImageBackground,
-  Image,
+  // ImageBackground, // Removed
+  // Image, // Removed
 } from "react-native";
+// Attempt to import icons
+import { Feather } from "@expo/vector-icons";
 import { AuthContext } from "../contexts/AuthContext";
 import type { StackNavigationProp } from "@react-navigation/stack";
 import type { RootStackParamList } from "../types/navigation"; // adjust path to where your types are defined
@@ -40,90 +42,97 @@ const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
     }
   };
 
-  const backgroundImage = require("../../assets/images/homie-bg.png") as number;
-  const saiyansImage = require("../../assets/images/saiyans.png") as number;
+  // Images removed
 
   return (
-    <ImageBackground
-      source={backgroundImage}
-      resizeMode="cover"
-      style={styles.background}
-    >
+    // Outer View for solid background color
+    <View style={styles.background}>
       <View style={styles.container}>
         {error.length > 0 && <Text style={styles.error}>{error}</Text>}
 
-        <Image source={saiyansImage} style={styles.logo} />
+        {/* Image removed */}
 
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          value={email}
-          onChangeText={setEmail}
-          autoCapitalize="none"
-          keyboardType="email-address"
-        />
+        <View style={styles.inputContainer}>
+          <Feather name="user" size={20} color="#FFD700" style={styles.icon} />
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            placeholderTextColor="rgba(255, 221, 0, 0.7)" // Lighter gold for placeholder
+        value={email}
+        onChangeText={setEmail}
+        autoCapitalize="none"
+        keyboardType="email-address"
+      />
+        </View>
 
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-        />
+        <View style={styles.inputContainer}>
+          <Feather name="lock" size={20} color="#FFD700" style={styles.icon} />
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            placeholderTextColor="rgba(255, 221, 0, 0.7)" // Lighter gold for placeholder
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+      />
 
-        <TouchableOpacity style={styles.button} onPress={onSubmit}>
-          <Text style={styles.buttonText}>Sign Up</Text>
-        </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={onSubmit}>
+        <Text style={styles.buttonText}>Sign Up</Text>
+      </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.switch}
-          onPress={() => navigation.navigate("SignIn")}
-        >
-          <Text style={styles.switchText}>
-            Already have an account? Sign In
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </ImageBackground>
+      <TouchableOpacity
+        style={styles.switch}
+        onPress={() => navigation.navigate("SignIn")}
+      >
+        <Text style={styles.switchText}>Already have an account? Sign In</Text>
+      </TouchableOpacity>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  background: {
+  background: { // This style is now for the main View
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "center", // Ensures container is centered if it doesn't fill flex
+    backgroundColor: "#192f6a", // Solid deep blue background
   },
-  container: {
-    flex: 1,
+  container: { // This is the content container
+    flex: 1, // Takes full space of background if needed, but content drives size
     padding: 16,
     justifyContent: "center",
-    alignItems: "center", // Center items horizontally
+    alignItems: "center",
   },
-  logo: {
-    width: 150, // Adjust width as needed
-    height: 150, // Adjust height as needed
-    resizeMode: "contain",
-    marginBottom: 20, // Add some space below the logo
+  // logo style removed
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.2)", // Slightly more opaque for better icon contrast
+    borderColor: "#FFD700",
+    borderWidth: 2, // As per SignInScreen, this was 2
+    borderRadius: 25,
+    marginBottom: 15,
+    paddingHorizontal: 15, // Padding for the container
+    width: "85%", // Adjusted width
+  },
+  icon: {
+    marginRight: 10, // Space between icon and text input
   },
   input: {
-    backgroundColor: "rgba(255, 255, 255, 0.3)", // Semi-transparent white background
-    borderColor: "#FFD700", // Gold border color
-    borderWidth: 2,
-    borderRadius: 25, // Rounded corners
+    flex: 1, // Input takes remaining space in inputContainer
+    // backgroundColor, borderColor, borderWidth, borderRadius, marginBottom, paddingHorizontal are now on inputContainer
     color: "#FFFFFF", // White text color
-    marginBottom: 15, // Increased margin
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    width: "80%",
+    paddingVertical: 10, // Vertical padding for the text input itself
+    // width is now controlled by inputContainer and flex:1
     fontSize: 16,
   },
   button: {
     backgroundColor: "#FF8C00", // Vibrant orange background
     paddingVertical: 15,
-    paddingHorizontal: 30,
+    // paddingHorizontal: 30, // Not specified in new reqs, width controls size
     borderRadius: 25, // Rounded corners
-    marginVertical: 10, // Add some vertical margin
-    width: "80%",
+    // marginVertical: 10, // Not specified, using marginBottom: 20 from reqs
+    marginBottom: 20, // As per new requirements
+    width: "85%", // As per new requirements (was "80%")
     alignItems: "center", // Center text horizontally
   },
   buttonText: {
@@ -138,7 +147,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     padding: 10, // Add some padding
     borderRadius: 10, // Rounded corners
-    width: "80%", // Match input width
+    width: "85%", // Match input/button width (was "80%")
   },
   switch: {
     marginTop: 24,
