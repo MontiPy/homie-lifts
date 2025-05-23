@@ -6,7 +6,6 @@ import {
   FlatList,
   TouchableOpacity,
   ActivityIndicator,
-  CheckBox
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { doc, getDoc } from "firebase/firestore";

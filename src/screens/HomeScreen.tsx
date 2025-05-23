@@ -68,6 +68,13 @@ const HomeScreen = () => {
           </TouchableOpacity>
         </View>
       </ImageBackground>
+      <TouchableOpacity
+  style={styles.button}
+  onPress={() => navigation.navigate("WorkoutHistory")}
+>
+  <Text style={styles.buttonText}>View Workout History</Text>
+</TouchableOpacity>
+
     </SafeAreaView>
   );
 };
@@ -173,6 +180,7 @@ const styles = StyleSheet.create({
     right: 0,
     alignItems: "center",
   },
+  
 });
 
 export default HomeScreen;
