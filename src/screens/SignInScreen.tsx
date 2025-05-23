@@ -46,7 +46,7 @@ const SignInScreen: React.FC<SignInScreenProps> = ({ navigation }) => {
 
   return (
     // Outer View for solid background color
-    <View style={styles.background}> 
+    <View style={styles.background}>
       <View style={styles.container}>
         {error.length > 0 && <Text style={styles.error}>{error}</Text>}
 
@@ -58,11 +58,11 @@ const SignInScreen: React.FC<SignInScreenProps> = ({ navigation }) => {
             style={styles.input}
             placeholder="Email"
             placeholderTextColor="rgba(255, 221, 0, 0.7)" // Lighter gold for placeholder
-        value={email}
-        onChangeText={setEmail}
-        autoCapitalize="none"
-        keyboardType="email-address"
-      />
+            value={email}
+            onChangeText={setEmail}
+            autoCapitalize="none"
+            keyboardType="email-address"
+          />
         </View>
 
         <View style={styles.inputContainer}>
@@ -71,32 +71,36 @@ const SignInScreen: React.FC<SignInScreenProps> = ({ navigation }) => {
             style={styles.input}
             placeholder="Password"
             placeholderTextColor="rgba(255, 221, 0, 0.7)" // Lighter gold for placeholder
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+          />
+        </View>
 
-      <TouchableOpacity style={styles.button} onPress={onSubmit}>
-        <Text style={styles.buttonText}>Sign In</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={onSubmit}>
+          <Text style={styles.buttonText}>Sign In</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.switch}
-        onPress={() => navigation.navigate("SignUp")}
-      >
-        <Text style={styles.switchText}>Don’t have an account? Sign Up</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.switch}
+          onPress={() => navigation.navigate("SignUp")}
+        >
+          <Text style={styles.switchText}>Don’t have an account? Sign Up</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  background: { // This style is now for the main View
+  background: {
+    // This style is now for the main View
     flex: 1,
     justifyContent: "center", // Ensures container is centered if it doesn't fill flex
-    backgroundColor: "#192f6a", // Solid deep blue background
+    backgroundColor: "#111418",
   },
-  container: { // This is the content container
+  container: {
+    // This is the content container
     flex: 1, // Takes full space of background if needed, but content drives size
     padding: 16,
     justifyContent: "center",

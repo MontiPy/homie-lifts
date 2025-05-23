@@ -33,7 +33,7 @@
     "react-native-gesture-handler": "^2.25.0",
     "react-native-reanimated": "^3.17.5",
     "react-native-safe-area-context": "^5.4.0",
-    "react-native-svg": "9.13.6",
+    "react-native-svg": "^9.13.6",
     "react-native-web": "^0.20.0",
     "tsx": "^4.19.4"
   },
