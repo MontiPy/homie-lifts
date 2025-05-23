@@ -1,6 +1,10 @@
 
 // src/services/firebase.ts (for frontend only)
 import { initializeApp } from "firebase/app";
+import { initializeAuth } from "firebase/auth";
+import { getReactNativePersistence } from "@firebase/auth/dist/rn/index.js";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import {
   FIREBASE_API_KEY,
@@ -22,3 +26,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
+// explicitly wire in AsyncStorage for persistence
+export const auth = initializeAuth(app, {
+  persistence: getReactNativePersistence(AsyncStorage),
+});
