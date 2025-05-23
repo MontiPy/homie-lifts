@@ -7,7 +7,11 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
-import { useRoute, useNavigation } from "@react-navigation/native";
+import {
+  useRoute,
+  useNavigation,
+  NavigationProp,
+} from "@react-navigation/native";
 import { doc, getDoc, collection, addDoc, Timestamp } from "firebase/firestore";
 import { db } from "../services/firebase";
 
@@ -25,13 +29,23 @@ interface Workout {
   exercises: Exercise[];
 }
 
+type RootStackParamList = {
+  WorkoutDetail: { workoutId: string };
+  WorkoutSummary: {
+    workoutName: string;
+    performance: { exercise: string; setsCompleted: boolean[] }[];
+  };
+};
+
 const WorkoutInProgressScreen = () => {
   const route = useRoute();
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const { workoutId } = route.params as { workoutId: string };
 
   const [workout, setWorkout] = useState<Workout | null>(null);
-  const [completedSets, setCompletedSets] = useState<{ [key: string]: boolean[] }>({});
+  const [completedSets, setCompletedSets] = useState<{
+    [key: string]: boolean[];
+  }>({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -87,10 +101,10 @@ const WorkoutInProgressScreen = () => {
         performance,
       });
       console.log("Workout saved successfully!");
-      navigation.navigate("WorkoutSummary" as never, {
+      navigation.navigate("WorkoutSummary", {
         workoutName: workout.name,
         performance,
-      } as never);
+      });
     } catch (error) {
       console.error("Failed to save workout:", error);
     }
@@ -113,7 +127,9 @@ const WorkoutInProgressScreen = () => {
         renderItem={({ item }) => (
           <View style={styles.exerciseCard}>
             <Text style={styles.exerciseName}>{item.name}</Text>
-            <Text style={styles.exerciseDetails}>{item.reps} reps @ {item.weight} lbs</Text>
+            <Text style={styles.exerciseDetails}>
+              {item.reps} reps @ {item.weight} lbs
+            </Text>
             {completedSets[item.name]?.map((checked, idx) => (
               <TouchableOpacity
                 key={idx}
@@ -128,7 +144,10 @@ const WorkoutInProgressScreen = () => {
         )}
       />
 
-      <TouchableOpacity style={styles.finishButton} onPress={handleFinishWorkout}>
+      <TouchableOpacity
+        style={styles.finishButton}
+        onPress={handleFinishWorkout}
+      >
         <Text style={styles.finishButtonText}>Finish Workout</Text>
       </TouchableOpacity>
     </View>

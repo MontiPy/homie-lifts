@@ -5,17 +5,18 @@ import WorkoutDetailScreen from "../screens/WorkoutDetailScreen";
 import WorkoutInProgressScreen from "../screens/WorkoutInProgressScreen";
 import WorkoutSummaryScreen from "../screens/WorkoutSummaryScreen";
 
-
-
 const Stack = createNativeStackNavigator();
 
 const WorkoutStack = () => (
-  <Stack.Navigator>
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="WorkoutList" component={WorkoutListScreen} />
     <Stack.Screen name="WorkoutDetail" component={WorkoutDetailScreen} />
-    <Stack.Screen name="WorkoutInProgress" component={WorkoutInProgressScreen} />
+    <Stack.Screen
+      name="WorkoutInProgress"
+      component={WorkoutInProgressScreen}
+    />
     <Stack.Screen name="WorkoutSummary" component={WorkoutSummaryScreen} />
- </Stack.Navigator>
+  </Stack.Navigator>
 );
 
 export default WorkoutStack;
