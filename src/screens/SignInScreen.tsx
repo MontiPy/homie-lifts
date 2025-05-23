@@ -7,6 +7,8 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
+  ImageBackground,
+  Image,
 } from "react-native";
 import { AuthContext } from "../contexts/AuthContext";
 import type { StackNavigationProp } from "@react-navigation/stack";
@@ -38,12 +40,24 @@ const SignInScreen: React.FC<SignInScreenProps> = ({ navigation }) => {
     }
   };
 
-  return (
-    <View style={styles.container}>
-      {error.length > 0 && <Text style={styles.error}>{error}</Text>}
+  // @ts-ignore
+  const backgroundImage = require("../../assets/images/homie-bg.png");
+  // @ts-ignore
+  const saiyansImage = require("../../assets/images/saiyans.png");
 
-      <TextInput
-        style={styles.input}
+  return (
+    <ImageBackground
+      source={backgroundImage}
+      resizeMode="cover"
+      style={styles.background}
+    >
+      <View style={styles.container}>
+        {error.length > 0 && <Text style={styles.error}>{error}</Text>}
+
+        <Image source={saiyansImage} style={styles.logo} />
+
+        <TextInput
+          style={styles.input}
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
@@ -59,7 +73,9 @@ const SignInScreen: React.FC<SignInScreenProps> = ({ navigation }) => {
         secureTextEntry
       />
 
-      <Button title="Sign In" onPress={onSubmit} />
+      <TouchableOpacity style={styles.button} onPress={onSubmit}>
+        <Text style={styles.buttonText}>Sign In</Text>
+      </TouchableOpacity>
 
       <TouchableOpacity
         style={styles.switch}
@@ -72,27 +88,64 @@ const SignInScreen: React.FC<SignInScreenProps> = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    justifyContent: "center",
+  },
   container: {
     flex: 1,
     padding: 16,
     justifyContent: "center",
+    alignItems: "center", // Center items horizontally
+  },
+  logo: {
+    width: 150, // Adjust width as needed
+    height: 150, // Adjust height as needed
+    resizeMode: "contain",
+    marginBottom: 20, // Add some space below the logo
   },
   input: {
-    borderBottomWidth: 1,
-    marginBottom: 12,
-    paddingVertical: 8,
+    backgroundColor: "rgba(255, 255, 255, 0.3)", // Semi-transparent white background
+    borderColor: "#FFD700", // Gold border color
+    borderWidth: 2,
+    borderRadius: 25, // Rounded corners
+    color: "#FFFFFF", // White text color
+    marginBottom: 15, // Increased margin
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    width: "80%",
+    fontSize: 16,
+  },
+  button: {
+    backgroundColor: "#FF8C00", // Vibrant orange background
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    borderRadius: 25, // Rounded corners
+    marginVertical: 10, // Add some vertical margin
+    width: "80%",
+    alignItems: "center", // Center text horizontally
+  },
+  buttonText: {
+    color: "#FFFFFF", // White text color
+    fontSize: 18,
+    fontWeight: "bold",
   },
   error: {
-    color: "red",
+    backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent black background
+    color: "#FF6347", // Tomato red text color
     marginBottom: 16,
     textAlign: "center",
+    padding: 10, // Add some padding
+    borderRadius: 10, // Rounded corners
+    width: "80%", // Match input width
   },
   switch: {
     marginTop: 24,
     alignItems: "center",
   },
   switchText: {
-    color: "#0066cc",
+    color: "#FFD700", // Gold color to match input borders
+    fontSize: 16, // Slightly larger font
   },
 });
 
