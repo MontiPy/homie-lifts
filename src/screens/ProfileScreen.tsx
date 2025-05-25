@@ -1,28 +1,77 @@
-// src/screens/ProfileScreen.tsx
-import React, { useContext } from "react";
-import { View, Text, Button, StyleSheet } from "react-native";
-import { AuthContext } from "../contexts/AuthContext";
+import React, { useState } from "react";
+import { View, Text, StyleSheet, FlatList } from "react-native";
+import { fetchUserWorkouts } from "../services/workoutService";
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback } from "react";
 
-export default function ProfileScreen() {
-  const { user, logout } = useContext(AuthContext);
 
-  const onLogout = async () => {
-    try {
-      await logout();
-    } catch (e: any) {
-      console.error("Failed to log out:", e);
-    }
-  };
+const ProfileScreen = () => {
+  const [workouts, setWorkouts] = useState<any[]>([]);
+
+useFocusEffect(
+  useCallback(() => {
+    const loadWorkouts = async () => {
+      const data = await fetchUserWorkouts();
+      setWorkouts(data);
+    };
+    loadWorkouts();
+  }, [])
+);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.email}>Signed in as: {user?.email}</Text>
-      <Button title="Log Out" onPress={onLogout} />
+      <Text style={styles.header}>🏋️ Your Workout History</Text>
+      <FlatList
+        data={workouts}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <View style={styles.card}>
+            <Text style={styles.name}>{item.workoutName}</Text>
+            <Text style={styles.meta}>
+              {item.completionRate}% completed —{" "}
+              {item.timestamp?.toDate?.().toLocaleString() ?? "No timestamp"}
+            </Text>
+          </View>
+        )}
+        ListEmptyComponent={<Text style={styles.empty}>No workouts yet.</Text>}
+      />
     </View>
   );
-}
+};
+
+export default ProfileScreen;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, justifyContent: "center" },
-  email: { marginBottom: 24, textAlign: "center" },
+  container: {
+    flex: 1,
+    backgroundColor: "#121212",
+    padding: 20,
+  },
+  header: {
+    fontSize: 26,
+    color: "#4caf50",
+    fontWeight: "bold",
+    marginBottom: 20,
+  },
+  card: {
+    backgroundColor: "#1f1f1f",
+    padding: 16,
+    borderRadius: 8,
+    marginBottom: 12,
+  },
+  name: {
+    fontSize: 18,
+    color: "#fff",
+    fontWeight: "600",
+  },
+  meta: {
+    fontSize: 14,
+    color: "#ccc",
+    marginTop: 4,
+  },
+  empty: {
+    color: "#aaa",
+    textAlign: "center",
+    marginTop: 40,
+  },
 });
