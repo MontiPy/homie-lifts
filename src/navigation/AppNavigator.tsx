@@ -1,28 +1,54 @@
 // src/navigation/AppNavigator.tsx
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { AuthContext, AuthProvider } from "../contexts/AuthContext";
 import SignInScreen from "../screens/SignInScreen";
 import SignUpScreen from "../screens/SignUpScreen";
-import MainTabs from "./MainTabs"; // your existing bottom‐tab navigator
+import MainTabs from "./MainTabs";
+import OnboardingStack from "./OnboardingStack";
+import { db } from "../services/firebase";
+import { doc, getDoc } from "firebase/firestore";
 
 const Stack = createStackNavigator();
 
 function Routes() {
   const { user, loading } = useContext(AuthContext);
-  if (loading) return null; // or a splash
+  const [onboardingComplete, setOnboardingComplete] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (!user) return;
+
+      const docRef = doc(db, "users", user.uid);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        setOnboardingComplete(data?.onboardingComplete ?? false);
+      } else {
+        setOnboardingComplete(false);
+      }
+    };
+
+    if (user) fetchUserData();
+  }, [user]);
+
+  if (loading || (user && onboardingComplete === null)) {
+    return null; // or a loading spinner
+  }
 
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {user ? (
-          <Stack.Screen name="Main" component={MainTabs} />
-        ) : (
+        {!user ? (
           <>
             <Stack.Screen name="SignIn" component={SignInScreen} />
             <Stack.Screen name="SignUp" component={SignUpScreen} />
           </>
+        ) : !onboardingComplete ? (
+          <Stack.Screen name="Onboarding" component={OnboardingStack} />
+        ) : (
+          <Stack.Screen name="Main" component={MainTabs} />
         )}
       </Stack.Navigator>
     </NavigationContainer>
