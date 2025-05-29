@@ -1,7 +1,21 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+} from "react-native";
 import { auth, db } from "../../services/firebase";
-import { doc, setDoc, getDocs, query, where, collection } from "firebase/firestore";
+import {
+  doc,
+  setDoc,
+  getDocs,
+  query,
+  where,
+  collection,
+} from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
 
 const UsernameScreen = () => {
@@ -9,29 +23,35 @@ const UsernameScreen = () => {
   const navigation = useNavigation<any>();
 
   const handleNext = async () => {
-  console.log("Username entered:", username);
+    console.log("Username entered:", username);
 
-  const q = query(collection(db, "users"), where("username", "==", username.toLowerCase()));
-  const snapshot = await getDocs(q);
-  console.log("Username taken:", !snapshot.empty);
+    const q = query(
+      collection(db, "users"),
+      where("username", "==", username.toLowerCase())
+    );
+    const snapshot = await getDocs(q);
+    console.log("Username taken:", !snapshot.empty);
 
-  const user = auth.currentUser;
-  console.log("auth.currentUser:", user);
+    const user = auth.currentUser;
+    console.log("auth.currentUser:", user);
 
-//   if (!username || !user) {
-//     console.log("Exiting early due to missing username or user");
-//     return;
-//   }
+    if (!username || !user) {
+      console.log("Exiting early due to missing username or user");
+      return;
+    }
 
-  await setDoc(doc(db, "users", user.uid), {
-    username: username.toLowerCase(),
-  }, { merge: true });
+    await setDoc(
+      doc(db, "users", user.uid),
+      {
+        username: username.toLowerCase(),
+      },
+      { merge: true }
+    );
 
-  console.log("Navigating to Goal");
- 
-  navigation.navigate("Goal");
-};
+    console.log("Navigating to Goal");
 
+    navigation.navigate("Goal");
+  };
 
   return (
     <View style={styles.container}>
@@ -39,7 +59,7 @@ const UsernameScreen = () => {
       <TextInput
         value={username}
         onChangeText={setUsername}
-        placeholder="@homielifter"
+        placeholder="homielifter"
         style={styles.input}
       />
       <TouchableOpacity style={styles.button} onPress={handleNext}>
@@ -70,6 +90,7 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 8,
     marginBottom: 20,
+    opacity: 0.8,
   },
   button: {
     backgroundColor: "#4caf50",

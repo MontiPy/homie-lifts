@@ -13,25 +13,7 @@ import { doc, getDoc } from "firebase/firestore";
 const Stack = createStackNavigator();
 
 function Routes() {
-  const { user, loading } = useContext(AuthContext);
-  const [onboardingComplete, setOnboardingComplete] = useState<boolean | null>(null);
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      if (!user) return;
-
-      const docRef = doc(db, "users", user.uid);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        setOnboardingComplete(data?.onboardingComplete ?? false);
-      } else {
-        setOnboardingComplete(false);
-      }
-    };
-
-    if (user) fetchUserData();
-  }, [user]);
+  const { user, loading, onboardingComplete } = useContext(AuthContext);
 
   if (loading || (user && onboardingComplete === null)) {
     return null; // or a loading spinner
