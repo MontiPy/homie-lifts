@@ -8,6 +8,7 @@ import { WorkoutScreenNavigationProp } from '../types/navigation';
 
 
 interface Workout {
+  id: string;
   name: string;
   category: string;
   durationWeeks: number;
@@ -21,8 +22,8 @@ const WorkoutListScreen = () => {
     const fetchWorkouts = async () => {
       const querySnapshot = await getDocs(collection(db, "workouts"));
       const fetched: (Workout & { id: string })[] = querySnapshot.docs.map(doc => ({
-                    ...(doc.data() as Workout),
-                    id: doc.id,}));
+            ...(doc.data() as Workout),
+            id: doc.id,}));
       setWorkouts(fetched);
     };
 
