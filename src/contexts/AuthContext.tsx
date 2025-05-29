@@ -13,11 +13,14 @@ import {
   signOut,
   User,
 } from "firebase/auth";
-import { auth } from "../services/firebase";
+import { auth, db } from "../services/firebase";
+import { doc, getDoc } from "firebase/firestore";
 
 interface AuthContextProps {
   user: User | null;
   loading: boolean;
+  onboardingComplete: boolean;
+  setOnboardingComplete: (value: boolean) => void;
   signup: (email: string, pw: string) => Promise<any>;
   login: (email: string, pw: string) => Promise<any>;
   logout: () => Promise<void>;
@@ -32,11 +35,28 @@ interface AuthProviderProps {
 export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [onboardingComplete, setOnboardingComplete] = useState(false);
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (u) => {
       setUser(u);
-      setLoading(false);
+
+      const checkOnboarding = async () => {
+        if (u) {
+          const docRef = doc(db, "users", u.uid);
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+            const data = docSnap.data();
+            setOnboardingComplete(data?.onboardingComplete ?? false);
+          } else {
+            setOnboardingComplete(false);
+          }
+        } else {
+          setOnboardingComplete(false);
+        }
+        setLoading(false);
+      };
+      checkOnboarding();
     });
     return unsub;
   }, []);
@@ -50,7 +70,17 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const logout = () => signOut(auth);
 
   return (
-    <AuthContext.Provider value={{ user, loading, signup, login, logout }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        loading,
+        onboardingComplete,
+        setOnboardingComplete,
+        signup,
+        login,
+        logout,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
