@@ -4,19 +4,18 @@ import { fetchUserWorkouts } from "../services/workoutService";
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback } from "react";
 
-
 const ProfileScreen = () => {
   const [workouts, setWorkouts] = useState<any[]>([]);
 
-useFocusEffect(
-  useCallback(() => {
-    const loadWorkouts = async () => {
-      const data = await fetchUserWorkouts();
-      setWorkouts(data);
-    };
-    loadWorkouts();
-  }, [])
-);
+  useFocusEffect(
+    useCallback(() => {
+      const loadWorkouts = async () => {
+        const data = await fetchUserWorkouts();
+        setWorkouts(data);
+      };
+      loadWorkouts();
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
