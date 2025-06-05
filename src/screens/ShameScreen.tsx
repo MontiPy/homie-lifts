@@ -17,13 +17,13 @@ const ShameScreen = () => {
     const loop = Animated.loop(
       Animated.sequence([
         Animated.timing(scaleAnim, {
-          toValue: 1.2,
-          duration: 600,
+          toValue: 1.25,
+          duration: 800,
           useNativeDriver: true,
         }),
         Animated.timing(scaleAnim, {
           toValue: 1,
-          duration: 600,
+          duration: 800,
           useNativeDriver: true,
         }),
       ])
@@ -36,6 +36,7 @@ const ShameScreen = () => {
     <ImageBackground
       source={require("../../assets/images/homie-bg.png")}
       style={styles.background}
+      resizeMode="cover"
     >
       <View style={styles.container}>
         <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
@@ -56,28 +57,30 @@ export default ShameScreen;
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    resizeMode: "cover", // optional but good for full coverage
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    height: "100%",
   },
   container: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#000",
   },
   shameButton: {
     backgroundColor: "#e53935",
-    paddingVertical: 20,
-    paddingHorizontal: 40,
+    paddingVertical: 30,
+    paddingHorizontal: 60,
     borderRadius: 100,
     shadowColor: "#e53935",
     shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.8,
-    shadowRadius: 10,
-    elevation: 10,
+    shadowOpacity: 1,
+    shadowRadius: 20,
+    elevation: 20,
   },
   shameText: {
     color: "#fff",
     fontWeight: "bold",
-    fontSize: 24,
+    fontSize: 36,
   },
 });
