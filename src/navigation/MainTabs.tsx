@@ -8,7 +8,7 @@ import HomeStack from "./HomeStack";
 import WorkoutStack from "./WorkoutStack";
 import ProfileScreen from "../screens/ProfileScreen";
 import StatsScreen from "../screens/StatsScreen";
-import ShamePreviewScreen from "../screens/ShamePreviewScreen";
+import ShameStack from "./ShameStack";
 import CustomTabBar from "./CustomTabBar";
 
 type TabParamList = {
@@ -54,7 +54,7 @@ export default function AppNavigator() {
     >
       <Tab.Screen name="Home" component={HomeStack} />
       <Tab.Screen name="Workout" component={WorkoutStack} />
-      <Tab.Screen name="Shame" component={ShamePreviewScreen} />
+      <Tab.Screen name="Shame" component={ShameStack} />
       <Tab.Screen name="Stats" component={StatsScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
