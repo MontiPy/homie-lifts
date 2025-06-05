@@ -41,40 +41,11 @@ const HomeScreen = () => {
             keyboardShouldPersistTaps="handled"
           >
             <View style={styles.overlay}>
-              {/* <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Last Workout</Text>
-                <Text style={styles.sectionText}>PHUL - Power Upper</Text>
-                <Text style={styles.sectionText}>Completed: 3 days ago</Text>
-                <TouchableOpacity style={styles.button}>
-                  <Text style={styles.buttonText}>Start Again</Text>
-                </TouchableOpacity>
-              </View> */}
-
-              <View style={styles.section}>
-                {/* <Text style={styles.sectionTitle}>Quick Actions</Text>
-                <TouchableOpacity style={styles.button}>
-                  <Text style={styles.buttonText}>Start Custom Workout</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.button}>
-                  <Text style={styles.buttonText}>Workout History</Text>
-                </TouchableOpacity> */}
-              </View>
+              <View style={styles.section}></View>
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
-        <View style={styles.footerContainer}>
-          <TouchableOpacity style={styles.shameButton}>
-            <Text style={styles.shameButtonText}>Shame</Text>
-          </TouchableOpacity>
-        </View>
       </ImageBackground>
-      <TouchableOpacity
-  style={styles.button}
-  onPress={() => navigation.navigate("WorkoutHistory")}
->
-  <Text style={styles.buttonText}>View Workout History</Text>
-</TouchableOpacity>
-
     </SafeAreaView>
   );
 };
@@ -180,7 +151,6 @@ const styles = StyleSheet.create({
     right: 0,
     alignItems: "center",
   },
-  
 });
 
 export default HomeScreen;
