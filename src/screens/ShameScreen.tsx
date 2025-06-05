@@ -34,7 +34,7 @@ const ShameScreen = () => {
 
   return (
     <ImageBackground
-      source={require("../../assets/images/homie-bg.png")}
+      source={require("../../assets/images/temple.png")}
       style={styles.background}
       resizeMode="cover"
     >
