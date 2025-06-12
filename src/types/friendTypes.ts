@@ -3,3 +3,8 @@ export interface Friend {
   displayName: string;
   shameLevel: number;
 }
+
+export interface FriendRequest {
+  id: string;
+  fromName: string;
+}
