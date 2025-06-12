@@ -8,12 +8,21 @@ import {
   Modal,
   Image,
   ScrollView,
+  TextInput,
 } from "react-native";
 import { fetchUserWorkouts } from "../services/workoutService";
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback } from "react";
 import { auth, db } from "../services/firebase";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
+import {
+  fetchFriendsWithShameLevel,
+  addFriendByIdentifier,
+  fetchFriendRequests,
+  acceptFriendRequest,
+  rejectFriendRequest,
+} from "../services/friendService";
+import { Friend, FriendRequest } from "../types/friendTypes";
 
 const GOALS = [
   "Build Muscle",
@@ -29,12 +38,7 @@ const ACCESS_OPTIONS = [
   "Full Gym Access",
 ];
 
-const FITNESS_LEVELS = [
-  "Beginner",
-  "Intermediate",
-  "Advanced",
-  "OVER 9000",
-];
+const FITNESS_LEVELS = ["Beginner", "Intermediate", "Advanced", "OVER 9000"];
 
 const AVATARS = [
   { id: "red", src: require("../../assets/avatars/red.png") },
@@ -48,6 +52,10 @@ const ProfileScreen = () => {
   const [showPreferences, setShowPreferences] = useState(false);
   const [userPrefs, setUserPrefs] = useState<any>({});
   const [loadingPrefs, setLoadingPrefs] = useState(true);
+  const [friends, setFriends] = useState<Friend[]>([]);
+  const [friendRequests, setFriendRequests] = useState<FriendRequest[]>([]);
+  const [showAddFriend, setShowAddFriend] = useState(false);
+  const [friendIdentifier, setFriendIdentifier] = useState("");
 
   const fetchUserPrefs = async () => {
     const user = auth.currentUser;
@@ -57,6 +65,10 @@ const ProfileScreen = () => {
     if (snap.exists()) {
       setUserPrefs(snap.data());
     }
+    const friendsData = await fetchFriendsWithShameLevel();
+    const requests = await fetchFriendRequests();
+    setFriends(friendsData);
+    setFriendRequests(requests);
     setLoadingPrefs(false);
   };
 
@@ -68,7 +80,7 @@ const ProfileScreen = () => {
       };
       loadWorkouts();
       fetchUserPrefs();
-    }, [])
+    }, []),
   );
 
   const handleSavePrefs = async () => {
@@ -81,6 +93,34 @@ const ProfileScreen = () => {
       avatarId: userPrefs.avatarId,
     });
     setShowPreferences(false);
+  };
+
+  const handleAddFriend = async () => {
+    try {
+      await addFriendByIdentifier(friendIdentifier.trim());
+      const data = await fetchFriendsWithShameLevel();
+      const requests = await fetchFriendRequests();
+      setFriends(data);
+      setFriendRequests(requests);
+      setFriendIdentifier("");
+      setShowAddFriend(false);
+    } catch (e) {
+      console.log("Failed to add friend", e);
+    }
+  };
+
+  const handleAcceptRequest = async (id: string) => {
+    await acceptFriendRequest(id);
+    const friendsData = await fetchFriendsWithShameLevel();
+    const requests = await fetchFriendRequests();
+    setFriends(friendsData);
+    setFriendRequests(requests);
+  };
+
+  const handleRejectRequest = async (id: string) => {
+    await rejectFriendRequest(id);
+    const requests = await fetchFriendRequests();
+    setFriendRequests(requests);
   };
 
   const renderOption = (options: string[], field: string) =>
@@ -141,6 +181,54 @@ const ProfileScreen = () => {
         ListEmptyComponent={<Text style={styles.empty}>No workouts yet.</Text>}
       />
 
+      <Text style={[styles.header, { marginTop: 30 }]}>👥 Your Friends</Text>
+      <FlatList
+        data={friends}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <View style={styles.card}>
+            <Text style={styles.name}>{item.displayName}</Text>
+          </View>
+        )}
+        ListEmptyComponent={<Text style={styles.empty}>No friends yet.</Text>}
+      />
+
+      {friendRequests.length > 0 && (
+        <>
+          <Text style={[styles.header, { marginTop: 30 }]}>🎉 Friend Requests</Text>
+          <FlatList
+            data={friendRequests}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <View style={styles.card}>
+                <Text style={styles.name}>{item.fromName}</Text>
+                <View style={styles.requestActions}>
+                  <TouchableOpacity
+                    style={styles.acceptButton}
+                    onPress={() => handleAcceptRequest(item.id)}
+                  >
+                    <Text style={styles.acceptText}>Accept</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.rejectButton}
+                    onPress={() => handleRejectRequest(item.id)}
+                  >
+                    <Text style={styles.rejectText}>Reject</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            )}
+          />
+        </>
+      )}
+
+      <TouchableOpacity
+        style={styles.addFriendButton}
+        onPress={() => setShowAddFriend(true)}
+      >
+        <Text style={styles.editButtonText}>Add Friend</Text>
+      </TouchableOpacity>
+
       <TouchableOpacity
         style={styles.editButton}
         onPress={() => setShowPreferences(true)}
@@ -179,6 +267,32 @@ const ProfileScreen = () => {
             <Text style={styles.cancelButtonText}>Cancel</Text>
           </TouchableOpacity>
         </ScrollView>
+      </Modal>
+
+      <Modal
+        animationType="slide"
+        visible={showAddFriend}
+        onRequestClose={() => setShowAddFriend(false)}
+      >
+        <View style={styles.drawer}>
+          <Text style={styles.drawerHeader}>Add Friend</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Username or Email"
+            placeholderTextColor="#ccc"
+            value={friendIdentifier}
+            onChangeText={setFriendIdentifier}
+          />
+          <TouchableOpacity style={styles.saveButton} onPress={handleAddFriend}>
+            <Text style={styles.saveButtonText}>Send Invite</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.cancelButton}
+            onPress={() => setShowAddFriend(false)}
+          >
+            <Text style={styles.cancelButtonText}>Cancel</Text>
+          </TouchableOpacity>
+        </View>
       </Modal>
     </View>
   );
@@ -317,5 +431,46 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 14,
     textTransform: "capitalize",
+  },
+  addFriendButton: {
+    marginTop: 10,
+    backgroundColor: "#2196f3",
+    padding: 14,
+    borderRadius: 8,
+    alignItems: "center",
+  },
+  input: {
+    backgroundColor: "#1f1f1f",
+    color: "#fff",
+    padding: 14,
+    borderRadius: 8,
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: "#333",
+  },
+  requestActions: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 10,
+  },
+  acceptButton: {
+    backgroundColor: "#4caf50",
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 6,
+  },
+  rejectButton: {
+    backgroundColor: "#e53935",
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 6,
+  },
+  acceptText: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
+  rejectText: {
+    color: "#fff",
+    fontWeight: "bold",
   },
 });
