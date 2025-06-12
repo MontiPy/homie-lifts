@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { VictoryChart, VictoryLine, VictoryTheme } from "victory-native";
+import { VictoryChart, VictoryLine } from "victory-native";
 
 interface StatsChartProps {
   title: string;
@@ -22,11 +22,7 @@ const StatsChart: React.FC<StatsChartProps> = ({
   return (
     <View style={styles.chartContainer}>
       <Text style={styles.chartTitle}>{title}</Text>
-      <VictoryChart
-        width={width}
-        height={height}
-        theme={VictoryTheme.material}
-      >
+      <VictoryChart width={width} height={height}>
         <VictoryLine
           interpolation="monotoneX"
           style={{ data: { stroke: "#4caf50" } }}
