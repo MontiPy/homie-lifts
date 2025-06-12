@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import Svg, { Polyline } from "react-native-svg";
+import { VictoryChart, VictoryLine, VictoryTheme } from "victory-native";
 
 interface StatsChartProps {
   title: string;
@@ -17,31 +17,25 @@ const StatsChart: React.FC<StatsChartProps> = ({
 }) => {
   if (data.length === 0) return null;
 
-  const maxValue = Math.max(...data);
-  const minValue = Math.min(...data);
-  const points = data
-    .map((value, index) => {
-      const x = (index / (data.length - 1)) * width;
-      const range = maxValue - minValue || 1;
-      const y = height - ((value - minValue) / range) * height;
-      return `${x},${y}`;
-    })
-    .join(" ");
+  const chartData = data.map((y, x) => ({ x, y }));
 
   return (
     <View style={styles.chartContainer}>
       <Text style={styles.chartTitle}>{title}</Text>
-      <Svg width={width} height={height}>
-        <Polyline
-          points={points}
-          fill="none"
-          stroke="#4caf50"
-          strokeWidth="2"
+      <VictoryChart
+        width={width}
+        height={height}
+        theme={VictoryTheme.material}
+      >
+        <VictoryLine
+          interpolation="monotoneX"
+          style={{ data: { stroke: "#4caf50" } }}
+          data={chartData}
         />
-      </Svg>
+      </VictoryChart>
     </View>
   );
-};
+}; 
 
 const styles = StyleSheet.create({
   chartContainer: {
