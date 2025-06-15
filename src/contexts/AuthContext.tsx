@@ -14,7 +14,7 @@ import {
   User,
 } from "firebase/auth";
 import { auth, db } from "../services/firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
 interface AuthContextProps {
   user: User | null;
@@ -61,8 +61,15 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     return unsub;
   }, []);
 
-  const signup = (email: string, pw: string) =>
-    createUserWithEmailAndPassword(auth, email, pw);
+  const signup = async (email: string, pw: string) => {
+    const cred = await createUserWithEmailAndPassword(auth, email, pw);
+    await setDoc(
+      doc(db, "users", cred.user.uid),
+      { email: cred.user.email },
+      { merge: true },
+    );
+    return cred;
+  };
 
   const login = (email: string, pw: string) =>
     signInWithEmailAndPassword(auth, email, pw);
